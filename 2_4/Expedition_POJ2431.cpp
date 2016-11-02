@@ -16,18 +16,18 @@ typedef long long ll;
 #define MAX_B (100)
 
 int N, L, P;
-int A[MAX_N + 1], B[MAX_N + 1];
+pair<int, int> F[MAX_N + 1];
 
 int solve(){
-  A[N] = L; B[N] = 0;
+  F[N].first = L; F[N].second = 0;
   int p = P;
   int x = 0;
   int ans = 0;
 
   std::priority_queue<int> pq;
   for (size_t i = 0; i <= N; i++) {
-    p -= A[i] - x;
-    while (p < 0) {
+    int d = F[i].first - x;
+    while (p - d < 0) {
       if (pq.empty()) {
         return -1;
       } else {
@@ -35,8 +35,9 @@ int solve(){
         ans++;
       }
     }
-    pq.push(B[i]);
-    x = A[i];
+    p -= d;
+    pq.push(F[i].second);
+    x = F[i].first;
   }
   return ans;
 }
@@ -44,13 +45,14 @@ int solve(){
 int main() {
   std::cin >> N;
   for (size_t i = 0; i < N; i++) {
-    int j = N - 1 - i;
-    std::cin >> A[j] >> B[j];
+    std::cin >> F[i].first >> F[i].second;
   }
   std::cin >> L >> P;
   for (size_t i = 0; i < N; i++) {
-    A[i] = L - A[i];
+    F[i].first = L - F[i].first;
   }
+  sort(F, F + N);
+
 
   std::cout << solve() << std::endl;
   return 0;
