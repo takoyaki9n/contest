@@ -11,7 +11,16 @@ typedef long long ll;
 
 #define MAX_N (10000000)
 
-int main() {
+int N;
 
+void solve() {
+  int ans = 0;
+
+  std::cout << ans << std::endl;
+}
+
+int main() {
+  std::cin >> N;
+  solve();
   return 0;
 }

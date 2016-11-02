@@ -53,7 +53,6 @@ int main() {
   }
   sort(F, F + N);
 
-
   std::cout << solve() << std::endl;
   return 0;
 }
