@@ -14,26 +14,25 @@ typedef long long ll;
 
 int par[3 * MAX_N], rnk[3 * MAX_N];
 int N, K;
-int T[MAX_K], X[MAX_K], Y[MAX_K];
 
-void init(int par[], int rnk[], int n) {
+void init(int n) {
   for (size_t i = 0; i < n; i++) {
     par[i] = i;
     rnk[i] = 0;
   }
 }
 
-int find(int x, int par[], int rnk[]) {
+int find(int x) {
   if (par[x] == x) {
     return x;
   } else {
-    return par[x] = find(par[x], par, rnk);
+    return par[x] = find(par[x]);
   }
 }
 
-void unite(int x, int y, int par[], int rnk[]) {
-  x = find(x, par, rnk);
-  y = find(y, par, rnk);
+void unite(int x, int y) {
+  x = find(x);
+  y = find(y);
   if (x == y) return;
   if (rnk[x] < rnk[y]){
     par[x] = y;
@@ -43,36 +42,38 @@ void unite(int x, int y, int par[], int rnk[]) {
   }
 }
 
-bool same(int x, int y, int par[], int rnk[]) {
-  return find(x, par, rnk) == find(y, par, rnk);
+bool same(int x, int y) {
+  return find(x) == find(y);
 }
 
 void solve() {
   int ans = 0;
 
-  init(par, rnk, 3 * N);
+  init(3 * N);
 
   for (size_t i = 0; i < K; i++) {
-    int t = T[i];
-    int x = X[i] - 1, y = Y[i] - 1;
+    int t, x, y;
+    scanf("%d %d %d", &t, &x, &y);
+    x--; y--;
+
     if (x < 0 || N <= x || y < 0 || N <= y) {
       ans++; continue;
     }
     if (t == 1) {
-      if (same(x, y + N, par, rnk) || same(x, y + 2 * N, par, rnk)) {
+      if (same(x, y + N) || same(x, y + 2 * N)) {
         ans++;
       } else {
-        unite(x, y, par, rnk);
-        unite(x + N, y + N, par, rnk);
-        unite(x + 2 * N, y + 2 * N, par, rnk);
+        unite(x, y);
+        unite(x + N, y + N);
+        unite(x + 2 * N, y + 2 * N);
       }
     } else {
-      if (same(x, y, par, rnk) || same(x, y + 2 * N, par, rnk)) {
+      if (same(x, y) || same(x, y + 2 * N)) {
         ans++;
       } else {
-        unite(x, y + N, par, rnk);
-        unite(x + N, y + 2 * N, par, rnk);
-        unite(x + 2 * N, y, par, rnk);
+        unite(x, y + N);
+        unite(x + N, y + 2 * N);
+        unite(x + 2 * N, y);
       }
     }
   }
@@ -82,9 +83,6 @@ void solve() {
 
 int main() {
   std::cin >> N >> K;
-  for (size_t i = 0; i < K; i++) {
-    std::cin >> T[i] >> X[i] >> Y[i];
-  }
 
   solve();
 
