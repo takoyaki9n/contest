@@ -1,14 +1,34 @@
+#include <algorithm>
+#include <bitset>
+#include <cassert>
+#include <cctype>
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
-#include <cmath>
+#include <cstring>
+#include <ctime>
+#include <deque>
+#include <functional>
+#include <iomanip>
 #include <iostream>
+#include <list>
+#include <map>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
 #include <string>
-#include <algorithm>
+#include <utility>
+#include <vector>
 
 using namespace std;
+typedef long long int ll;
+typedef vector<ll> Vl;
+typedef vector<int> Vi;
+typedef pair<int, int> Pi;
 
-typedef long long ll;
-
+#define INF   (1e9 + 7)
 #define MAX_N (10000000)
 
 int N;
@@ -16,11 +36,13 @@ int N;
 void solve() {
   int ans = 0;
 
-  std::cout << ans << std::endl;
+  printf("%d\n", ans);
 }
 
 int main() {
-  std::cin >> N;
+  scanf("%d", &N);
+
   solve();
+
   return 0;
 }
