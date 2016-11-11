@@ -35,10 +35,9 @@ typedef set<int> Si;
 #define MAX_XY (10000)
 
 int N, D2;
-int P[MAX_N][2];
-Si G[MAX_N];
-
+bool G[MAX_N][MAX_N];
 int par[MAX_N], rnk[MAX_N];
+int ACT[MAX_N];
 
 void init(int n) {
   for (size_t i = 0; i < n; i++) {
@@ -73,23 +72,22 @@ bool same(int x, int y) {
 
 void solve() {
   char c;
-  int n, m;
-  Si act;
   init(N);
+  int i = 0;
   while(scanf("\n%c", &c) != EOF){
     if (c == 'O') {
-      scanf("%d", &n);
-      n--;
-      for (set<int>::iterator it = act.begin(); it != act.end(); it++) {
-        int m = *it;
-        if (G[n].find(m) != G[n].end()) {
+      int n;
+      scanf("%d", &n); n--;
+      for (size_t j = 0; j < i; j++) {
+        int m = ACT[j];
+        if (G[n][m]) {
           unite(n, m);
         }
-     }
-      act.insert(n);
+      }
+      ACT[i] = n; i++;
     } else if(c == 'S'){
-      scanf("%d %d", &n, &m);
-      n--; m--;
+      int n, m;
+      scanf("%d %d", &n, &m); n--; m--;
       if (same(n, m)) {
         printf("SUCCESS\n");
       } else {
@@ -104,14 +102,19 @@ void solve() {
 int main() {
   scanf("%d %d", &N, &D2);
   D2 = D2 * D2;
+
+  for (size_t i = 0; i < N; i++)
+    for (size_t j = 0; j < N; j++)
+      G[i][j] = false;
+
   for (size_t i = 0; i < N; i++) {
-    scanf("%d %d", &P[i][0], &P[i][1]);
+    scanf("%d %d", &par[i], &rnk[i]);
     for (size_t j = 0; j < i; j++) {
-      int dx = P[i][0] - P[j][0];
-      int dy = P[i][1] - P[j][1];
+      int dx = par[i] - par[j];
+      int dy = rnk[i] - rnk[j];
       if (dx * dx + dy * dy <= D2) {
-        G[i].insert(j);
-        G[j].insert(i);
+        G[i][j] = true;
+        G[j][i] = true;
       }
     }
   }
