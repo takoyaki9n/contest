@@ -65,7 +65,6 @@ void solve() {
 int main() {
   scanf("%d %d", &V, &E);
 
-
   solve();
 
   return 0;
