@@ -18,8 +18,7 @@ int C, L;
 pii COW[MAX_C];
 pii LOT[MAX_L];
 
-struct Cmp
-{
+struct Cmp {
 	bool operator()(const pii &a, const pii &b) const {
 		return a.second > b.second;
 	}
