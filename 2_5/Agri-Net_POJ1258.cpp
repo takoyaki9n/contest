@@ -63,14 +63,15 @@ void solve() {
 }
 
 int main() {
-  scanf("%d", &V);
-  for (size_t i = 0; i < V; i++) {
-    for (size_t j = 0; j < V; j++) {
-      scanf("%d", &COST[i][j]);
+  while(scanf("%d", &V) != EOF){
+    for (size_t i = 0; i < V; i++) {
+      for (size_t j = 0; j < V; j++) {
+        scanf("%d", &COST[i][j]);
+      }
     }
-  }
 
-  solve();
+    solve();
+  }
 
   return 0;
 }
