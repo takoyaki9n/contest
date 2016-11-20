@@ -12,21 +12,21 @@ typedef long long ll;
 #define MAX_N (50000)
 #define MAX_K (100000)
 
-int par[3 * MAX_N], rnk[3 * MAX_N];
+int PAR[MAX_N], RNK[MAX_N];
 int N, K;
 
-void init(int n) {
+void init_union_find(int n) {
   for (size_t i = 0; i < n; i++) {
-    par[i] = i;
-    rnk[i] = 0;
+    PAR[i] = i;
+    RNK[i] = 0;
   }
 }
 
 int find(int x) {
-  if (par[x] == x) {
+  if (PAR[x] == x) {
     return x;
   } else {
-    return par[x] = find(par[x]);
+    return RNK[x] = find(PAR[x]);
   }
 }
 
@@ -34,11 +34,11 @@ void unite(int x, int y) {
   x = find(x);
   y = find(y);
   if (x == y) return;
-  if (rnk[x] < rnk[y]){
-    par[x] = y;
+  if (RNK[x] < RNK[y]){
+    PAR[x] = y;
   } else {
-    par[y] = x;
-    if (rnk[x] == rnk[y]) rnk[x]++;
+    PAR[y] = x;
+    if (RNK[x] == RNK[y]) RNK[x]++;
   }
 }
 
