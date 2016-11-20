@@ -38,7 +38,7 @@ std::vector<edge> G[MAX_V];
 int d[MAX_V];
 
 void dijkstra(int s) {
-  std::priority_queue<Pi, vector<Pi>, greater<Pi>> pque;
+  std::priority_queue<Pi, vector<Pi>, greater<Pi> > pque;
   fill(d, d + V, INF);
   d[s] = 0;
   pque.push(Pi(0, s));
