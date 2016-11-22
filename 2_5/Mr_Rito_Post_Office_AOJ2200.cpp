@@ -36,40 +36,48 @@ typedef pair<int, int> Pi;
 
 struct edge { int to; int cost; char type; };
 struct Postman { int pos; int ship; int cost; };
+class Compare {
+public:
+    bool operator () (const Postman &p1, const Postman &p2) {
+      return p1.cost > p2.cost;
+    }
+};
+
 int V, E, R;
 std::vector<edge> G[MAX_V];
 int D[MAX_V][MAX_V], PATH[MAX_R];
-
-bool cmp(const Postman &p1, const Postman &p2) {
-  return p1.cost < p2.cost;
-}
 
 void solve() {
   for (size_t v = 0; v < V; v++) fill(D[v], D[v] + V, INF);
   D[PATH[0]][PATH[0]] = 0;
 
   for (size_t i = 0; i < R - 1; i++) {
-    std::priority_queue<Postman, vector<Postman>, function<bool(Postman, Postman)> > pque(cmp);
+    std::priority_queue<Postman, vector<Postman>, Compare > pque;
     int v0 = PATH[i], vf = PATH[i + 1];
+    // printf("%d -> %d\n", v0, vf);
     for (int s = 0; s < V; s++) {
-      if (D[v0][s] < INF) pque.push((Postman) {v0, s, D[v0][s]});
+      Postman p = {v0, s, D[v0][s]};
+      if (D[v0][s] < INF) pque.push(p);
     }
     while (!pque.empty()) {
       Postman p = pque.top(); pque.pop();
       int v = p.pos, s = p.ship;
       if(D[v][s] < p.cost) continue;
+      // printf("v=%d,s=%d,c=%d\n", v, s, p.cost);
       for (size_t j = 0; j < G[v].size(); j++) {
         edge e = G[v][j];
         int u = e.to, cost = e.cost;
         if (e.type == 'L') {
           if (D[v][s] + cost < D[u][s]) {
             D[u][s] = D[v][s] + cost;
-            if (u != vf) pque.push((Postman) {u, s, D[u][s]});
+            pque.push((Postman) {u, s, D[u][s]});
+//            printf("push: v=%d,s=%d,c=%d,t=%c\n", u, s, D[u][s], e.type);
           }
         } else if (v == s) {
           if (D[v][s] + cost < D[u][u]) {
             D[u][u] = D[v][s] + cost;
-            if (u != vf) pque.push((Postman) {u, u, D[u][u]});
+            pque.push((Postman) {u, u, D[u][u]});
+            // printf("push: v=%d,s=%d,c=%d,t=%c\n", u, u, D[u][u], e.type);
           }
         }
       }
@@ -106,6 +114,8 @@ int main() {
     }
 
     solve();
+
+    for (size_t v = 0; v < V; v++) G[v].clear();
   }
 
   return 0;
