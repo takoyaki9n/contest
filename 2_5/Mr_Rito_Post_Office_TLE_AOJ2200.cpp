@@ -69,14 +69,14 @@ void solve() {
         int u = e.to, cost = e.cost;
         if (e.type == 'L') {
           if (D[v][s] + cost < D[u][s]) {
-            D[u][s] = D[v][s] + cost;
-            pque.push((Postman) {u, s, D[u][s]});
+            D[u][s] = D[v][s] + cost;  
+            if (u != vf) pque.push((Postman) {u, s, D[u][s]});
 //            printf("push: v=%d,s=%d,c=%d,t=%c\n", u, s, D[u][s], e.type);
           }
         } else if (v == s) {
           if (D[v][s] + cost < D[u][u]) {
             D[u][u] = D[v][s] + cost;
-            pque.push((Postman) {u, u, D[u][u]});
+            if (u != vf) pque.push((Postman) {u, u, D[u][u]});
             // printf("push: v=%d,s=%d,c=%d,t=%c\n", u, u, D[u][u], e.type);
           }
         }
