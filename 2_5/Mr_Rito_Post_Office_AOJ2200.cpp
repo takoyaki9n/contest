@@ -57,17 +57,16 @@ void solve() {
     int u = PATH[i - 1], v = PATH[i];
     for (int w = 0; w < V; w++) {
       for (int x = 0; x < V; x++) {
-        int d = DP[i-1][w] + DL[u][w] + DS[w][x] + DL[x][v];
 //        printf("DP[%d][%d]+DL[%d][%d]+DS[%d][%d]+DL[%d][%d] = %d\n",i-1,w,u,w,w,x,x,v,d);
-        DP[i][x] = (0 <= d && d < INF)? min(DP[i][x], d): DP[i][x];
+        int d = DP[i-1][w];
+        d += (w == x)? DL[u][v]: DL[u][w] + DS[w][x] + DL[x][v];
+        DP[i][x] = (0 <= d)? min(DP[i][x], d): DP[i][x];
       }
     }
   }
 
   int ans = INF;
-  for (size_t v = 0; v < V; v++) {
-    ans = min(ans, DP[R-1][v]);
-  }
+  for (size_t v = 0; v < V; v++) ans = min(ans, DP[R-1][v]);
   printf("%d\n", ans);
 }
 
