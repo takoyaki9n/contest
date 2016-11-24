@@ -38,19 +38,19 @@ int D[MAX_N];
 bool remove_rock(int w) {
   int dl = 0, n = 0;
   for (size_t i = 0; i < N; i++) {
-    if (D[i] - dl < w) {
-      n++;
-    } else {
-      dl = D[i];
+    if (L - D[i] >= w) {
+      if (D[i] - dl >= w) {
+        n++;
+        dl = D[i];
+      }
     }
   }
-  if (L - dl < w) n++;
-  return n <= M;
+  return N - n <= M;
 }
 
 void solve() {
   sort(D, D + N);
-  int wl = 0, wr = L;
+  int wl = 0, wr = L + 1;
 
   while (wr - wl > 1) {
     int wm = (wl + wr) / 2;
