@@ -45,7 +45,7 @@ void dijkstra(int s) {
   while (!pque.empty()) {
     Pi p = pque.top(); pque.pop();
     int v = p.second;
-    if (d[v] < p.second) continue;
+    if (d[v] < p.first) continue;
     for (size_t i = 0; i < G[v].size(); i++) {
       edge e = G[v][i];
       if (d[e.to] > d[v] + e.cost) {
