@@ -41,10 +41,10 @@ char MAP[MAX_H][MAX_W + 1];
 Pi ST, GL;
 
 bool in_map(int i, int j) {
-  return (0 <= i && i < W) && (0 <= j && j < W);
+  return (0 <= i && i < H) && (0 <= j && j < W);
 }
 
-int dijkstra(int x) {
+ll dijkstra(ll x) {
   ll d[MAX_H][MAX_W];
   std::priority_queue<Pli, vector<Pli>, greater<Pli> > pque;
   for (size_t i = 0; i < H; i++) fill(d[i], d[i] + W, INF);
@@ -59,9 +59,9 @@ int dijkstra(int x) {
     for (size_t i = 0; i < 4; i++) {
       Pi q = Pi(p.first + DX[i].first, p.second + DX[i].second);
       if (in_map(q.first, q.second)) {
-        int cost = (MAP[q.first][q.second] == '#')? x: 1;
-        if (d[p.first][p.second] + cost < d[q.first][q.second]) {
-          d[q.first][q.second] = d[p.first][p.second] + cost;
+        ll cost = d[p.first][p.second] + ((MAP[q.first][q.second] == '#')? x: 1);
+        if (cost >= 0 && cost < d[q.first][q.second]) {
+          d[q.first][q.second] = cost;
           pque.push(Pli(d[q.first][q.second], q));
         }
       }
@@ -74,7 +74,7 @@ void solve() {
   ll xl = 1, xr = T;
   while (xr - xl > 1) {
     ll xm = (xl + xr) / 2;
-//    printf("%lld %lld %lld\n", xl, xm, xr);
+    // printf("%lld %lld %lld\n", xl, xm, xr);
     if (dijkstra(xm) <= T) {
       xl = xm;
     } else {
