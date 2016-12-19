@@ -63,8 +63,12 @@ void solve() {
 }
 
 int main() {
+  for (int i = 0; i < 4; i++) {
+    std::reverse(WORDS[i].begin(), WORDS[i].end());
+  }
   cin >> S;
-
+  std::reverse(S.begin(), S.end());
+  
   solve();
   
   return 0;
