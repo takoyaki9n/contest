@@ -33,47 +33,63 @@ typedef pair<int, int> Pi;
 #define MAX_K (100000)
 #define MAX_L (100000)
 
-int N, K, L;
-std::vector<int> GR[MAX_N];
-std::vector<int> GT[MAX_N];
-bool TABLE_R[MAX_N], TABLE_T[MAX_N];
+class UnionFind {
+private:
+  int par[MAX_N];
+public:
+  void init(int n) {
+    for (int x = 0; x < n; x++) par[x] = x;
+  }
+  int find(int x) {
+    return (par[x] == x)? x: par[x] = find(par[x]);
+  }
+  void unite(int x, int y) {
+    x = find(x);
+    y = find(y);
+    if (x != y) par[y] = x;
+  }
+  bool same(int x, int y) {
+    return find(x) == find(y);
+  }
+};
 
-void mapping(int s, vector<int> *g, bool *tbl) {
-  fill(tbl, tbl + N, false);
-  queue<int> que;
-  tbl[s] = true;
-  que.push(s);
-  while (!que.empty()) {
-    int v = que.front(); que.pop();
-    for (int i = 0; i < g[v].size(); i++) {
-      int u = g[v][i];
-      if (!tbl[u]) {
-        tbl[u] = true;
-        que.push(u);
+int N, K, L;
+std::vector<int> GR[MAX_N], GT[MAX_N];
+UnionFind UFR, UFT;
+map<int, int> COUNTS;
+
+int encode(int n, int m) {
+  return (m + n) * (m + n + 1) / 2 + n;
+}
+
+void mapping(vector<int> *g, UnionFind &uf) {
+  uf.init(N);
+  for (int v = 0; v < N; v++) {
+    if (uf.find(v) != v) continue;
+    queue<int> q;
+    q.push(v);
+    while (!q.empty()) {
+      int u = q.front(); q.pop();
+      for (int i = 0; i < g[u].size(); i++) {
+        int w = g[u][i];
+        if (!uf.same(v, w)) {
+          uf.unite(v, w);
+          q.push(w);
+        }
       }
     }
   }
 }
 
 void solve() {
+  mapping(GR, UFR);
+  mapping(GT, UFT);
+  for (int v = 0; v < N; v++){
+    int p = encode(UFR.find(v), UFT.find(v));
+    COUNTS[p] = COUNTS[p] + 1;
+  }
   for (int v = 0; v < N; v++) {
-    mapping(v, GR, TABLE_R);
-    mapping(v, GT, TABLE_T);
-    int ans = 0;
-
-    // printf("%d: ", v);
-    // for (int u = 0; u < N; u++) {
-    //   if (TABLE_R[u])
-    //     printf("%s", (TABLE_T[u])? "B ": "R ");
-    //   else 
-    //     printf("%s", (TABLE_T[u])? "T ": "N ");
-    // }
-    // printf("\n");
-
-    for (int u = 0; u < N; u++) {
-      if (TABLE_R[u] && TABLE_T[u]) ans++;
-    }
-    printf("%d ", ans);    
+    printf("%d ", COUNTS[encode(UFR.find(v), UFT.find(v))]);
   }
   printf("\n");
 }
