@@ -56,11 +56,7 @@ public:
 int N, K, L;
 std::vector<int> GR[MAX_N], GT[MAX_N];
 UnionFind UFR, UFT;
-map<int, int> COUNTS;
-
-int encode(int n, int m) {
-  return (m + n) * (m + n + 1) / 2 + n;
-}
+map<Pi, int> COUNTS;
 
 void mapping(vector<int> *g, UnionFind &uf) {
   uf.init(N);
@@ -85,11 +81,11 @@ void solve() {
   mapping(GR, UFR);
   mapping(GT, UFT);
   for (int v = 0; v < N; v++){
-    int p = encode(UFR.find(v), UFT.find(v));
+    Pi p = Pi(UFR.find(v), UFT.find(v));
     COUNTS[p] = COUNTS[p] + 1;
   }
   for (int v = 0; v < N; v++) {
-    printf("%d ", COUNTS[encode(UFR.find(v), UFT.find(v))]);
+    printf("%d ", COUNTS[Pi(UFR.find(v), UFT.find(v))]);
   }
   printf("\n");
 }
