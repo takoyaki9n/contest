@@ -15,36 +15,25 @@ typedef long long ll;
 int PAR[MAX_N], RNK[MAX_N];
 int N, K;
 
-void init_union_find(int n) {
-  for (size_t i = 0; i < n; i++) {
-    PAR[i] = i;
-    RNK[i] = 0;
+class UnionFind {
+private:
+  int par[MAX_N];
+public:
+  void init(int n) {
+    for (int x = 0; x < n; x++) par[x] = x;
   }
-}
-
-int find(int x) {
-  if (PAR[x] == x) {
-    return x;
-  } else {
-    return RNK[x] = find(PAR[x]);
+  int find(int x) {
+    return (par[x] == x)? x: par[x] = find(par[x]);
   }
-}
-
-void unite(int x, int y) {
-  x = find(x);
-  y = find(y);
-  if (x == y) return;
-  if (RNK[x] < RNK[y]){
-    PAR[x] = y;
-  } else {
-    PAR[y] = x;
-    if (RNK[x] == RNK[y]) RNK[x]++;
+  void unite(int x, int y) {
+    x = find(x);
+    y = find(y);
+    if (x != y) par[y] = x;
   }
-}
-
-bool same(int x, int y) {
-  return find(x) == find(y);
-}
+  bool same(int x, int y) {
+    return find(x) == find(y);
+  }
+};
 
 int main() {
   std::cin >> N >> K;

@@ -12,44 +12,33 @@ typedef long long ll;
 #define MAX_N (50000)
 #define MAX_K (100000)
 
-int par[3 * MAX_N], rnk[3 * MAX_N];
+class UnionFind {
+private:
+  int par[MAX_N * 3];
+public:
+  void init(int n) {
+    for (int x = 0; x < n; x++) par[x] = x;
+  }
+  int find(int x) {
+    return (par[x] == x)? x: par[x] = find(par[x]);
+  }
+  void unite(int x, int y) {
+    x = find(x);
+    y = find(y);
+    if (x != y) par[y] = x;
+  }
+  bool same(int x, int y) {
+    return find(x) == find(y);
+  }
+};
+
 int N, K;
-
-void init(int n) {
-  for (size_t i = 0; i < n; i++) {
-    par[i] = i;
-    rnk[i] = 0;
-  }
-}
-
-int find(int x) {
-  if (par[x] == x) {
-    return x;
-  } else {
-    return par[x] = find(par[x]);
-  }
-}
-
-void unite(int x, int y) {
-  x = find(x);
-  y = find(y);
-  if (x == y) return;
-  if (rnk[x] < rnk[y]){
-    par[x] = y;
-  } else {
-    par[y] = x;
-    if (rnk[x] == rnk[y]) rnk[x]++;
-  }
-}
-
-bool same(int x, int y) {
-  return find(x) == find(y);
-}
+UnionFind UF;
 
 void solve() {
   int ans = 0;
 
-  init(3 * N);
+  UF.init(3 * N);
 
   for (size_t i = 0; i < K; i++) {
     int t, x, y;
@@ -60,20 +49,20 @@ void solve() {
       ans++; continue;
     }
     if (t == 1) {
-      if (same(x, y + N) || same(x, y + 2 * N)) {
+      if (UF.same(x, y + N) || UF.same(x, y + 2 * N)) {
         ans++;
       } else {
-        unite(x, y);
-        unite(x + N, y + N);
-        unite(x + 2 * N, y + 2 * N);
+        UF.unite(x, y);
+        UF.unite(x + N, y + N);
+        UF.unite(x + 2 * N, y + 2 * N);
       }
     } else {
-      if (same(x, y) || same(x, y + 2 * N)) {
+      if (UF.same(x, y) || UF.same(x, y + 2 * N)) {
         ans++;
       } else {
-        unite(x, y + N);
-        unite(x + N, y + 2 * N);
-        unite(x + 2 * N, y);
+        UF.unite(x, y + N);
+        UF.unite(x + N, y + 2 * N);
+        UF.unite(x + 2 * N, y);
       }
     }
   }
