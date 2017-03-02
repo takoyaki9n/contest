@@ -22,6 +22,13 @@
 #include <utility>
 #include <vector>
 
+#define DEBUG
+#ifdef DEBUG
+#define debug_printf printf
+#else
+#define debug_printf 1 ? 0 : printf
+#endif
+
 using namespace std;
 typedef long long int ll;
 typedef vector<ll> Vl;
