@@ -49,16 +49,10 @@ void solve() {
   int s, t, sum;
   s = t = sum = 0;
   while (s < N) {
-    while (t <= N) {
-      dprintf("sum[%d:%d] = %d\n", s, t, sum);
-      if (sum >= S) {
-        dprintf("t - s = %d\n", t - s);
-        ans = min(ans, t - s);
-        break;
-      }
-      sum += A[t++];
-    }
-    sum -= A[s++];
+    while (t < N && sum < S) sum += A[t++];
+    if (sum < S) break;
+    ans = min(ans, t - s);
+    sum -= A[s++];    
   }
 
   ans = (ans < N)? ans: 0;
