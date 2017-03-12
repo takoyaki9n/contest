@@ -27,7 +27,7 @@ int next(int q, int pq, int &l, int &r, string bd) {
     } else {
         cerr << "Invalid response: " << bd << endl;
     }
-    return (pq < q)? l: r;
+    return (q - l < r - q)? r: l;
 }
 
 /**
@@ -49,7 +49,7 @@ int main() {
     
     int Xl = 0, Xr = W - 1;
     read_bomb_dir();
-    int pX = X; X = Xl;
+    int pX = X; X = Xl + Xr - X;
     print_position(X, Y);
     while (Xl < Xr) {
         int tmp = X;
@@ -61,7 +61,7 @@ int main() {
 
     int Yl = 0, Yr = H - 1;
     read_bomb_dir();
-    int pY = Y; Y = Yl;
+    int pY = Y; Y = Yl + Yr - Y;
     print_position(X, Y);
     while (Yl < Yr) {
         int tmp = Y;
