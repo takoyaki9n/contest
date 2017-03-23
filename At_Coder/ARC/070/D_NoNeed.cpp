@@ -41,14 +41,12 @@ typedef pair<int, int> Pi;
 
 int N, K;
 int A[MAX_N];
-bool DP[MAX_K];
+bitset<MAX_K> DP(1);
 
 void solve() {
   sort(A, A + N);
   ll sum = 0;
   for (int i = 0; i < N; i++) sum += A[i];
-  for (int j = 0; j < K; j++) DP[j] = false;
-  DP[0] = true;
 
   int ans = 0;
   for (int i = N - 1; i >= 0; i--) {
@@ -60,11 +58,12 @@ void solve() {
       }
     }
     if (no_need) ans++;
+
     debug_printf("sum = %lld, a = %d\n", sum, A[i]);
     for (int j = 0; j < K; j++) debug_printf("%s ", DP[j]? "o": "x");
     debug_printf("\n");
 
-    for (int j = K - A[i] - 1; j >= 0; j--) DP[j + A[i]] |= DP[j];
+    DP |= DP << A[i];
 
     sum -= A[i];
   }
