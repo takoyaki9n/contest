@@ -67,25 +67,27 @@ void place_x() {
   }
 }
 
+void place_p_byx(int i, int x) {
+  if (D[x]) return;
+  for (int j = 0; j <= i / 2; j++) {
+    int ys[2] = {N - 1 - i + 2 * j, N - 1 + i - 2 * j};
+    for (int l = 0; l < 2; l++) {
+      int y = ys[l];
+      if (!U[y]) {
+        D[x] = U[y] = true;
+        int r = (x + y - N + 1) / 2, c = (x - y + N - 1) / 2;
+        check('+', r, c);
+        return;
+      }
+    }
+  }
+}
+
 void place_p() {
   for (int i = 0; i < N; i++) {
     int xs[2] = {i, 2 * (N - 1) - i};
     for (int k = 0; k < 2; k++) {
-      int x = xs[k];
-      if (D[x]) continue;
-      for (int j = 0; j <= i / 2; j++) {
-        int ys[2] = {N - 1 - i + 2 * j, N - 1 + i - 2 * j};
-        for (int l = 0; l < 2; l++) {
-          int y = ys[l];
-          if (!U[y]) {
-            D[x] = U[y] = true;
-            int r = (x + y - N + 1) / 2, c = (x - y + N - 1) / 2;
-            check('+', r, c);
-            goto BR;
-          }
-        }
-      }
-BR:;
+      place_p_byx(i, xs[k]);
     }
   }
 }
