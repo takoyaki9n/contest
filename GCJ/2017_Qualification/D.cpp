@@ -22,7 +22,7 @@
 #include <utility>
 #include <vector>
 
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
 #define debug_printf printf
 #else
@@ -68,25 +68,18 @@ void place_x() {
 }
 
 void place_p() {
-  if(!D[0] && !U[N - 1]) {
-    check('+', 0, 0);
-    D[0] = U[N - 1] = true;
-  }
-  if(!D[N - 1] && !U[0]) {
-    check('+', 0, N - 1);
-    D[N - 1] = U[0] = true;
-  }
-  for (int x = 0; x < 2 * N - 1; x++) {
-    if (D[x]) continue;
-    int yl = abs(N - 1 - x), yr = 2 * (N - 1) - yl;
-//    debug_printf("x = %d, %d <= y <= %d\n", x, yl, yr);
-
-    for (int y = yl; y <= yr; y += 2) {
-      if (!U[y]) {
-        D[x] = U[y] = true;
-        int r = (x + y - N + 1) / 2, c = (x - y + N - 1) / 2;
-        check('+', r, c);
-        break;
+  for (int i = 0; i < N; i++) {
+    int x[2] = {i, 2 * (N - 1) - i};
+    for (int j = 0; j < 2; j++) {
+      if (D[x[j]]) continue;
+      int yl = abs(N - 1 - x[j]), yr = 2 * (N - 1) - yl;
+      for (int y = yl; y <= yr; y += 2) {
+        if (!U[y]) {
+          D[x[j]] = U[y] = true;
+          int r = (x[j] + y - N + 1) / 2, c = (x[j] - y + N - 1) / 2;
+          check('+', r, c);
+          break;
+        }
       }
     }
   }
