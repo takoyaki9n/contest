@@ -69,18 +69,23 @@ void place_x() {
 
 void place_p() {
   for (int i = 0; i < N; i++) {
-    int x[2] = {i, 2 * (N - 1) - i};
-    for (int j = 0; j < 2; j++) {
-      if (D[x[j]]) continue;
-      int yl = abs(N - 1 - x[j]), yr = 2 * (N - 1) - yl;
-      for (int y = yl; y <= yr; y += 2) {
-        if (!U[y]) {
-          D[x[j]] = U[y] = true;
-          int r = (x[j] + y - N + 1) / 2, c = (x[j] - y + N - 1) / 2;
-          check('+', r, c);
-          break;
+    int xs[2] = {i, 2 * (N - 1) - i};
+    for (int k = 0; k < 2; k++) {
+      int x = xs[k];
+      if (D[x]) continue;
+      for (int j = 0; j <= i / 2; j++) {
+        int ys[2] = {N - 1 - i + 2 * j, N - 1 + i - 2 * j};
+        for (int l = 0; l < 2; l++) {
+          int y = ys[l];
+          if (!U[y]) {
+            D[x] = U[y] = true;
+            int r = (x + y - N + 1) / 2, c = (x - y + N - 1) / 2;
+            check('+', r, c);
+            goto BR;
+          }
         }
       }
+BR:;
     }
   }
 }
@@ -125,7 +130,7 @@ int main() {
       BD[r][c] = m;
       if (m == 'x' || m == 'o') V[r] = H[c] = true;
       if (m == '+' || m == 'o') D[r + c] = U[r - c + N - 1] = true;
-      debug_printf("#%d:  %c %d %d\n", t + 1, m, r + 1, c + 1);
+      debug_printf("#%d: %c %d %d\n", t + 1, m, r + 1, c + 1);
     }
 
     place_x();
