@@ -22,7 +22,7 @@
 #include <utility>
 #include <vector>
 
-//#define DEBUG
+#define DEBUG
 #ifdef DEBUG
 #define debug_printf printf
 #else
@@ -43,24 +43,35 @@ ll X[MAX_N], P[MAX_N];
 int W[MAX_N];
 
 void solve() {
-  for (int i = 0; i < N; i++) P[i] = X[i] + W[i] * T;
+  for (int i = 0; i < N; i++) {
+    P[i] = W[i] * T + X[i];
+    P[i] = ((P[i] % L) + L) % L;
+  }
 
-  int id = 0;
+  int cnt = 0;
+  int round = 2 * T / L;
+  int rest = 2 * T % L;
   for (int i = 1; i < N; i++) {
-    if (W[0] == W[i]) continue;
-
-  }
-  id = -id % N;
-  id = (id + N) % N;
-
-  for (int i = 0; i < N; i++) {
-    P[i] = P[i] % L;
-    P[i] = (P[i] + L) % L;
+    if (W[i] != W[0]) {
+      cnt += round;
+      int d = X[i] - X[0];
+      if (W[0] < 0) d = L - d;
+      if (d < rest) cnt++;
+    }
   }
 
+  int p0 = P[0], i0;
   sort(P, P + N);
+  if (W[0] > 0) {
+    i0 = (int) (lower_bound(P, P + N, p0) - P);
+  } else {
+    i0 = (int) (upper_bound(P, P + N, p0) - P) - 1;
+  }
+  i0 = i0 - W[0] * cnt;
+  i0 = ((i0 % N) + N) % N;
+
   for (int i = 0; i < N; i++) {
-    printf("%lld\n", P[(id + i) % N]);
+    printf("%lld\n", P[(i + i0) % N]);
   }
 }
 
