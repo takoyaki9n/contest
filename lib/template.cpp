@@ -47,7 +47,7 @@ void solve() {
 }
 
 int main() {
-  scanf("%d", &N);
+  cin >> N;
 
   solve();
 
