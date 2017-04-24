@@ -35,15 +35,22 @@ typedef vector<ll> Vl;
 typedef vector<int> Vi;
 typedef pair<int, int> Pi;
 
-#define INF   (1e9 + 7)
-#define MAX_N (10000000)
+#define FST first
+#define SND second
+
+#define MAX_N   (100000)                  // 10^5
+// #define MAX_N   (1000000000)              // 10^9
+// #define MAX_N   (1000000000000000000)     // 10^18
+#define BASE    (1000000000 + 7)          // 10^9 + 7
+#define INFI    (1000000000 + 7)          // 10^9 + 7
+#define INFL    (1000000000000000000 + 7) // 10^18 + 7
 
 int N;
 
 void solve() {
   int ans = 0;
 
-  printf("%d\n", ans);
+  cout << ans << endl;
 }
 
 int main() {
