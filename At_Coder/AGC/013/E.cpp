@@ -32,6 +32,7 @@
 using namespace std;
 typedef long long int ll;
 typedef vector<ll> Vl;
+typedef vector<Vl> VVl;
 typedef vector<int> Vi;
 typedef pair<int, int> Pi;
 
@@ -41,21 +42,21 @@ typedef pair<int, int> Pi;
 
 int N, M;
 int X[MAX_M + 1];
-ll A[3] = {1, 3, 1};
-ll P[3][3] = {
+Vl A{1, 3, 1};
+VVl P1{
   {2, 1, 0},
   {3, 1, 2},
-  {1, 0, 1}
-}, Q[3][3] = {
-  {1, 1, 0},
+  {1, 0, 1}},
+P[31],
+Q{{1, 1, 0},
   {0, 1, 2},
-  {0, 0, 1}
-}, R[3][3];
+  {0, 0, 1}},
+R(3, Vl(3));
 
-void mat_print3x3(ll a[3][3]) {
+void mat_print(VVl &a) {
 #ifdef DEBUG
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
+  for (int i = 0; i < a.size(); i++) {
+    for (int j = 0; j < a[0].size(); j++) {
       debug_printf("%lld ", a[i][j]);
     }
     debug_printf("\n");
@@ -63,42 +64,46 @@ void mat_print3x3(ll a[3][3]) {
 #endif
 }
 
-void mat_copy3x3(ll a[3][3], ll b[3][3]) {
-  for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 3; j++) a[i][j] = b[i][j];
-}
-
-void mat_prod3x3(ll a[3][3], ll b[3][3], ll c[3][3]) {
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
+void mat_prod(VVl &a, VVl b, VVl c) {
+  for (int i = 0; i < a.size(); i++) {
+    for (int j = 0; j < a[0].size(); j++) {
       a[i][j] = 0;
-      for (int k = 0; k < 3; k++) a[i][j] = (a[i][j] + b[i][k] * c[k][j]) % BASE;
+      for (int k = 0; k < b[0].size(); k++) a[i][j] = (a[i][j] + b[i][k] * c[k][j]) % BASE;
     }
   }
 }
 
-void mat_pow3x3(ll a[3][3], ll b[3][3], ll n) {
-  if (n == 0) {
-    for (int i = 0; i < 3; i++)
-      for (int j = 0; j < 3; j++) a[i][j] = (i == j)? 1: 0;
-  } else {
-    ll c[3][3];
-    mat_pow3x3(c, b, n / 2);
-    mat_prod3x3(a, c, c);
-    if (n % 2 == 1) {
-      mat_copy3x3(c, a);
-      mat_prod3x3(a, b, c);
+void build_pow_P() {
+  for (int i = 0; i < 31; i++) P[i] = VVl(3, Vl(3));
+
+  for (int i = 0; i < P[0].size(); i++) {
+    for (int j = 0; j < P[0][0].size(); j++) {
+      P[0][i][j] = (i == j)? 1: 0;
+      P[1][i][j] = P1[i][j];
     }
+  }
+  for (int i = 2; i < 31; i++) mat_prod(P[i], P[i - 1], P[i - 1]);
+}
+
+void pow_P(VVl &a, ll n) {
+  for (int i = 0; i < a.size(); i++)
+    for (int j = 0; j < a[0].size(); j++) a[i][j] = P[0][i][j];
+
+  for (int i = 1; i < 31; i++) {
+    if (n == 0) break;
+    if ((n & 1) != 0)
+      mat_prod(a, a, P[i]);
+    n >>= 1;
   }
 }
 
 void solve() {
-  mat_pow3x3(R, P, X[0] - 1);
+  pow_P(R, X[0] - 1);
   for (int i = 1; i <= M; i++) {
-    ll s[3][3], t[3][3];
-    mat_prod3x3(s, R, Q);
-    mat_pow3x3(t, P, X[i] - X[i - 1] - 1);
-    mat_prod3x3(R, s, t);
+    VVl s(3, Vl(3));
+    mat_prod(R, R, Q);
+    pow_P(s, X[i] - X[i - 1] - 1);
+    mat_prod(R, R, s);
   }
 
   ll ans = 0;
@@ -108,6 +113,8 @@ void solve() {
 }
 
 int main() {
+  build_pow_P();
+
   cin >> N >> M;
   for (int i = 0; i < M; i++) cin >> X[i];
   X[M] = N;
