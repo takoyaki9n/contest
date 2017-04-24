@@ -39,24 +39,25 @@ typedef pair<int, int> Pi;
 #define BASE  (1000000000 + 7)
 #define MAX_N (1000000000)
 #define MAX_M (100000)
+#define K     (3)
 
 int N, M;
 int X[MAX_M + 1];
-Vl A{1, 3, 1};
-VVl P1{
+ll A[K] = {1, 3, 1};
+ll P1[K][K] = {
   {2, 1, 0},
   {3, 1, 2},
   {1, 0, 1}},
-P[31],
-Q{{1, 1, 0},
+P[31][K][K] ,
+Q[K][K] = {{1, 1, 0},
   {0, 1, 2},
   {0, 0, 1}},
-R(3, Vl(3));
+R[K][K];
 
-void mat_print(VVl &a) {
+void mat_print(ll a[K][K]) {
 #ifdef DEBUG
-  for (int i = 0; i < a.size(); i++) {
-    for (int j = 0; j < a[0].size(); j++) {
+  for (int i = 0; i < K; i++) {
+    for (int j = 0; j < K; j++) {
       debug_printf("%lld ", a[i][j]);
     }
     debug_printf("\n");
@@ -64,35 +65,42 @@ void mat_print(VVl &a) {
 #endif
 }
 
-void mat_prod(VVl &a, VVl b, VVl c) {
-  for (int i = 0; i < a.size(); i++) {
-    for (int j = 0; j < a[0].size(); j++) {
+void mat_copy(ll a[K][K], ll b[K][K]) {
+  for (int i = 0; i < K; i++)
+    for (int j = 0; j < K; j++) a[i][j] = b[i][j];
+}
+
+void mat_prod(ll a[K][K], ll b[K][K], ll c[K][K]) {
+  for (int i = 0; i < K; i++) {
+    for (int j = 0; j < K; j++) {
       a[i][j] = 0;
-      for (int k = 0; k < b[0].size(); k++) a[i][j] = (a[i][j] + b[i][k] * c[k][j]) % BASE;
+      for (int k = 0; k < K; k++) a[i][j] = (a[i][j] + b[i][k] * c[k][j]) % BASE;
     }
   }
 }
 
 void build_pow_P() {
-  for (int i = 0; i < 31; i++) P[i] = VVl(3, Vl(3));
-
-  for (int i = 0; i < P[0].size(); i++) {
-    for (int j = 0; j < P[0][0].size(); j++) {
+  for (int i = 0; i < K; i++) {
+    for (int j = 0; j < K; j++) {
       P[0][i][j] = (i == j)? 1: 0;
       P[1][i][j] = P1[i][j];
     }
   }
+
   for (int i = 2; i < 31; i++) mat_prod(P[i], P[i - 1], P[i - 1]);
 }
 
-void pow_P(VVl &a, ll n) {
-  for (int i = 0; i < a.size(); i++)
-    for (int j = 0; j < a[0].size(); j++) a[i][j] = P[0][i][j];
+void pow_P(ll a[K][K], ll n) {
+  for (int i = 0; i < K; i++)
+    for (int j = 0; j < K; j++) a[i][j] = P[0][i][j];
 
   for (int i = 1; i < 31; i++) {
     if (n == 0) break;
-    if ((n & 1) != 0)
-      mat_prod(a, a, P[i]);
+    if ((n & 1) != 0) {
+      ll b[K][K];
+      mat_prod(b, a, P[i]);
+      mat_copy(a, b);
+    }
     n >>= 1;
   }
 }
@@ -100,10 +108,10 @@ void pow_P(VVl &a, ll n) {
 void solve() {
   pow_P(R, X[0] - 1);
   for (int i = 1; i <= M; i++) {
-    VVl s(3, Vl(3));
-    mat_prod(R, R, Q);
+    ll s[K][K], t[K][K];
     pow_P(s, X[i] - X[i - 1] - 1);
-    mat_prod(R, R, s);
+    mat_prod(t, R, Q);
+    mat_prod(R, t, s);
   }
 
   ll ans = 0;
