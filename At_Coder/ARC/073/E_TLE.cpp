@@ -21,6 +21,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <unordered_set>
 
 //#define DEBUG
 #ifdef DEBUG
@@ -52,15 +53,38 @@ ll score(range r) {
   return (r.rr - r.rl) * (r.br - r.bl);
 }
 
+class Compare {
+public:
+    bool operator () (const range &r1, const range &r2) {
+      return score(r1) > score(r2);
+    }
+};
+
 void solve() {
+  set<range, Compare> rngs[2];
   range rng = {X[0], X[0], Y[0], Y[0]};
+  rngs[0].insert(rng);
   for (int i = 1; i < N; i++) {
-    range rng1 = {min(X[i], rng.rl), max(X[i], rng.rr), min(Y[i], rng.bl), max(Y[i], rng.br)};
-    range rng2 = {min(Y[i], rng.rl), max(Y[i], rng.rr), min(X[i], rng.bl), max(X[i], rng.br)};
-    rng = (score(rng1) < score(rng2))? rng1: rng2;
+    int x = (i - 1) % 2, y = i % 2;
+    rngs[y].clear();
+    for (auto r : rngs[x]) {
+      range r0 = {min(X[i], r.rl), max(X[i], r.rr), min(Y[i], r.bl), max(Y[i], r.br)};
+      range r1 = {min(Y[i], r.rl), max(Y[i], r.rr), min(X[i], r.bl), max(X[i], r.br)};
+      rngs[y].insert(r0);
+      rngs[y].insert(r1);
+      debug_printf("([%lld,%lld] [%lld,%lld]) ", r.rl, r.rr, r.bl, r.br);
+    }
+    debug_printf("\n");
   }
 
-  cout << score(rng) << endl;
+  ll ans = INFL;
+  for (auto r : rngs[(N - 1) % 2]) {
+    ans = min(ans, score(r));
+    debug_printf("([%lld,%lld] [%lld,%lld]) ", r.rl, r.rr, r.bl, r.br);
+  }
+  debug_printf("\n");
+
+  cout << ans << endl;
 }
 
 int main() {
