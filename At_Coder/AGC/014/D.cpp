@@ -46,7 +46,8 @@ typedef pair<ll, ll> Pl;
 #define INFL    (1000000000000000000 + 7) // 10^18 + 7
 
 int N;
-set<int> G[MAX_N], V;
+set<int> G[MAX_N];
+bitset<MAX_N> V(0);
 
 void make_tree(int v) {
   for (auto u: G[v]) {
@@ -56,13 +57,9 @@ void make_tree(int v) {
 }
 
 void remove_match(int v) {
-  bool single = true;
   for (auto u : G[v]) {
     remove_match(u);
-    if (single && V.find(u) != V.end()) {
-      V.erase(u); V.erase(v);
-      single = false;
-    }
+    if (V[v] && V[u]) V[v] = V[u] = 0;
   }
 }
 
@@ -70,7 +67,7 @@ string winner() {
   int root = 0;
   make_tree(root);
   remove_match(root);
-  return (V.size() == 0)? "Second": "First";
+  return V.none()? "Second": "First";
 }
 
 int main() {
@@ -80,10 +77,8 @@ int main() {
     int a, b;
     cin >> a >> b;
     a--; b--;
-    G[a].insert(b);
-    G[b].insert(a);
-    V.insert(a);
-    V.insert(b);
+    G[a].insert(b); G[b].insert(a);
+    V.set(a); V.set(b);
   }
 
   string ans = winner();
