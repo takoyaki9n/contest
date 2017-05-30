@@ -47,7 +47,6 @@ typedef pair<int, int> Pi;
 #define INFL    (1000000000000000000 + 7) // 10^18 + 7
 
 ll A, B;
-string S[MAX_N];
 
 ll calc() {
   ll r = 1L << 61;
