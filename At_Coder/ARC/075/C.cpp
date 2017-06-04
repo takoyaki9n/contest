@@ -46,7 +46,8 @@ typedef pair<int, int> Pi;
 #define INFI    (1000000000 + 7)          // 10^9 + 7
 #define INFL    (1000000000000000000 + 7) // 10^18 + 7
 
-int N, S[MAX_N];
+int N;
+ll S[MAX_N];
 
 void solve() {
   ll sum = 0;
@@ -56,13 +57,13 @@ void solve() {
   if (sum % 10 != 0) {
     ans = sum;
   } else {
-    sort(S, S + N);
+    ll mn = INFL;
     for (int i = 0; i < N; i++) {
       if (S[i] % 10 != 0) {
-        ans = sum - S[i];
-        break;
+        mn = min(mn, S[i]);
       }
     }
+    ans = max(0LL, sum - mn);
   }
 
   cout << ans << endl;
