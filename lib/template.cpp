@@ -34,6 +34,7 @@ typedef long long int ll;
 typedef vector<ll> Vl;
 typedef vector<int> Vi;
 typedef pair<int, int> Pi;
+typedef pair<ll, ll> Pl;
 
 #define FST first
 #define SND second
