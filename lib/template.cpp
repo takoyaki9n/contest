@@ -21,6 +21,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+using namespace std;
 
 #define DEBUG
 #ifdef DEBUG
@@ -29,7 +30,6 @@
 #define debug_printf 1 ? 0 : printf
 #endif
 
-using namespace std;
 typedef long long int ll;
 typedef vector<ll> Vl;
 typedef vector<int> Vi;
@@ -39,14 +39,16 @@ typedef pair<ll, ll> Pl;
 #define FST first
 #define SND second
 
-#define MAX_N   (100000)                  // 10^5
-// #define MAX_N   (1000000000)              // 10^9
-// #define MAX_N   (1000000000000000000)     // 10^18
-#define BASE    (1000000000 + 7)          // 10^9 + 7
-#define INFI    (1000000000 + 7)          // 10^9 + 7
-#define INFL    (1000000000000000000 + 7) // 10^18 + 7
+const int MAX_N = 1000;                  // 10^5
+// const int MAX_N = 100000;                  // 10^5
+// const int MAX_N = 100000;                  // 10^5
+// const int MAX_N = 1000000000;              // 10^9
+// const ll  MAX_N = 1000000000000000000;     // 10^18
+// const int BASE  = 1000000000 + 7;          // 10^9 + 7
+// const int INFI  = 1000000000 + 7;          // 10^9 + 7
+// const ll INFL  = 1000000000000000000 + 7; // 10^18 + 7
 
-int N;
+int N, A[MAX_N];
 
 void solve() {
   int ans = 0;
@@ -56,6 +58,7 @@ void solve() {
 
 int main() {
   cin >> N;
+  for (int i = 0; i < N; i++) cin >> A[i];
 
   solve();
 
