@@ -39,8 +39,7 @@ typedef pair<ll, ll> Pl;
 #define FST first
 #define SND second
 
-const int MAX_N = 1000;                  // 10^5
-// const int MAX_N = 100000;                  // 10^5
+const int MAX_N = 100000;                  // 10^5
 // const int MAX_N = 100000;                  // 10^5
 // const int MAX_N = 1000000000;              // 10^9
 // const ll  MAX_N = 1000000000000000000;     // 10^18
