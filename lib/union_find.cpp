@@ -15,9 +15,10 @@ typedef long long ll;
 int PAR[MAX_N], RNK[MAX_N];
 int N, K;
 
-class UnionFind {
+class union_find {
 private:
-  int par[MAX_N];
+  static const int max_n = MAX_N;
+  int par[max_n];
 public:
   void init(int n) {
     for (int x = 0; x < n; x++) par[x] = x;
