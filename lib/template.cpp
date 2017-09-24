@@ -47,6 +47,9 @@ const int MAX_N = 100000;                  // 10^5
 // const int INFI  = 1000000000 + 7;          // 10^9 + 7
 // const ll INFL  = 1000000000000000000 + 7; // 10^18 + 7
 
+ll MOD(ll x, ll y) { return (x % y + y) % y; }
+ll DIV(ll x, ll y) { return (x - MOD(x, y)) / y; }
+
 int N, A[MAX_N];
 
 void solve() {
