@@ -37,7 +37,7 @@ typedef pair<int, int> Pi;
 typedef pair<ll, ll> Pl;
 
 #define MOD(x, y) ((((x) % (y)) + (y)) % (y))
-#define DIV(x, y) ((x) < 0 ? (x) / (y) - 1: (x) / (y))
+#define DIV(x, y) (((x) < 0) ? ((x) + 1) / (y) - 1: (x) / (y))
 #define FST first
 #define SND second
 
@@ -60,11 +60,11 @@ void solve() {
 
   for (int r = 0; r < H; r++) {
     for (int c = 0; c < W; c++) {
-      int x = r + c, y = r - c + W;
+      int x = r + c, y = r - c;
       int z = DIV((2 * x + D - 1), (2 * D));
       int w = DIV((2 * y + D - 1), (2 * D));
-      z = z % 2;
-      w = w % 2;
+      z = MOD(z, 2);
+      w = MOD(w, 2);
       #ifdef DEBUG
       cout << r << " " << c << endl;
       cout << x << " " << y << endl;
