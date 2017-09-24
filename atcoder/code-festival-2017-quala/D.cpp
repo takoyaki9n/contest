@@ -36,8 +36,6 @@ typedef vector<int> Vi;
 typedef pair<int, int> Pi;
 typedef pair<ll, ll> Pl;
 
-#define MOD(x, y) ((((x) % (y)) + (y)) % (y))
-#define DIV(x, y) (((x) < 0) ? ((x) + 1) / (y) - 1: (x) / (y))
 #define FST first
 #define SND second
 
@@ -48,6 +46,9 @@ const int MAX_H = 500;                  // 10^5
 // const int BASE  = 1000000000 + 7;          // 10^9 + 7
 // const int INFI  = 1000000000 + 7;          // 10^9 + 7
 // const ll INFL  = 1000000000000000000 + 7; // 10^18 + 7
+
+ll MOD(ll x, ll y) { return (x % y + y) % y; }
+ll DIV(ll x, ll y) { return (x - MOD(x, y)) / y; }
 
 string COLOR = "RGBY";
 
@@ -61,8 +62,8 @@ void solve() {
   for (int r = 0; r < H; r++) {
     for (int c = 0; c < W; c++) {
       int x = r + c, y = r - c;
-      int z = DIV((2 * x + D - 1), (2 * D));
-      int w = DIV((2 * y + D - 1), (2 * D));
+      int z = DIV(2 * x + D - 1, 2 * D);
+      int w = DIV(2 * y + D - 1, 2 * D);
       z = MOD(z, 2);
       w = MOD(w, 2);
       #ifdef DEBUG
